@@ -10,6 +10,7 @@ package kubelet
 import (
 	"fmt"
 
+	"github.com/DataDog/datadog-agent/pkg/config"
 	"github.com/DataDog/datadog-agent/pkg/util/kubernetes/clustername"
 	k "github.com/DataDog/datadog-agent/pkg/util/kubernetes/kubelet"
 	"github.com/DataDog/datadog-agent/pkg/util/log"
@@ -21,6 +22,10 @@ var kubeUtilGet kubeUtilGetter = k.GetKubeUtil
 
 // HostnameProvider builds a hostname from the kubernetes nodename and an optional cluster-name
 func HostnameProvider() (string, error) {
+	if config.IsFeaturePresent(config.Kubernetes) {
+		return "", nil
+	}
+
 	ku, err := kubeUtilGet()
 	if err != nil {
 		return "", err
