@@ -80,6 +80,8 @@ type Config struct {
 	RemoteTaggerEnabled bool
 	// HostServiceName string
 	HostServiceName string
+	// E2EStartTestEnabled defines if we should run end to end injection test at start
+	E2EStartTestEnabled bool
 }
 
 // IsEnabled returns true if any feature is enabled. Has to be applied in config package too
@@ -116,6 +118,7 @@ func NewConfig(cfg *config.Config) (*Config, error) {
 		ERPCDentryResolutionEnabled:        aconfig.Datadog.GetBool("runtime_security_config.erpc_dentry_resolution_enabled"),
 		MapDentryResolutionEnabled:         aconfig.Datadog.GetBool("runtime_security_config.map_dentry_resolution_enabled"),
 		RemoteTaggerEnabled:                aconfig.Datadog.GetBool("runtime_security_config.remote_tagger"),
+		E2EStartTestEnabled:                true,
 	}
 
 	// if runtime is enabled then we force fim
