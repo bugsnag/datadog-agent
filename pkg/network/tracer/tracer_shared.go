@@ -1,3 +1,5 @@
+//+build linux_bpf windows
+
 package tracer
 
 import (
