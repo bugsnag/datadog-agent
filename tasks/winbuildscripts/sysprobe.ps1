@@ -68,7 +68,7 @@ if($err -ne 0){
     [Environment]::Exit($err)
 }
 
-& inv system-probe.kitchen-prepare
+& inv -e system-probe.kitchen-prepare
 
 $err = $LASTEXITCODE
 Write-Host Test result is $err

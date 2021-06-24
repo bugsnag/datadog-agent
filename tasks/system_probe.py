@@ -158,6 +158,7 @@ def test(
     runtime_compiled=False,
     skip_linters=False,
     run=None,
+    windows=is_windows,
 ):
     """
     Run tests on eBPF parts
@@ -172,16 +173,18 @@ def test(
             "preserve your environment",
         )
 
-    if not skip_linters:
+    if not skip_linters and not windows:
         clang_format(ctx)
         clang_tidy(ctx)
 
-    if not skip_object_files:
+    if not skip_object_files and not windows:
         build_object_files(ctx, bundle_ebpf=bundle_ebpf)
 
-    build_tags = [BPF_TAG]
-    if bundle_ebpf:
-        build_tags.append(BUNDLE_TAG)
+    build_tags = []
+    if not windows:
+        build_tags.append(BPF_TAG)
+        if bundle_ebpf:
+            build_tags.append(BUNDLE_TAG)
 
     args = {
         "build_tags": ",".join(build_tags),
@@ -195,15 +198,15 @@ def test(
     if runtime_compiled:
         env['DD_TESTS_RUNTIME_COMPILED'] = "1"
 
-    cmd = 'go test -mod=mod -v -tags {build_tags} {output_params} {pkgs} {run}'
-    if not is_root():
+    cmd = 'go test -mod=mod -v -tags "{build_tags}" {output_params} {pkgs} {run}'
+    if not windows and not is_root():
         cmd = 'sudo -E ' + cmd
 
     ctx.run(cmd.format(**args), env=env)
 
 
 @task
-def kitchen_prepare(ctx):
+def kitchen_prepare(ctx, windows=is_windows):
     """
     Compile test suite for kitchen
     """
@@ -212,12 +215,19 @@ def kitchen_prepare(ctx):
     if os.path.exists(KITCHEN_ARTIFACT_DIR):
         shutil.rmtree(KITCHEN_ARTIFACT_DIR)
 
+    build_tags = []
+    if not windows:
+        build_tags.append(BPF_TAG)
+
     # Retrieve a list of all packages we want to test
     # This handles the elipsis notation (eg. ./pkg/ebpf/...)
     target_packages = []
     for pkg in TEST_PACKAGES_LIST:
         target_packages += (
-            check_output("go list -f '{{{{ .Dir }}}}' -tags {tags} {pkg}".format(tags=BPF_TAG, pkg=pkg), shell=True)
+            check_output('go list -f "{{{{ .Dir }}}}" -mod=mod -tags "{tags}" {pkg}'.format(
+                tags=",".join(build_tags),
+                pkg=pkg,
+            ), shell=True)
             .decode('utf-8')
             .strip()
             .split("\n")
