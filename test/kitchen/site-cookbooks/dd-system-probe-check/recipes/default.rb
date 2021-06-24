@@ -14,8 +14,8 @@ testdir = value_for_platform(
 
 remote_directory testdir do
   source 'tests'
-  mode 755
-  files_mode 755
+  mode '755'
+  files_mode '755'
   case
   when !platform?('windows')
     files_owner 'root'
