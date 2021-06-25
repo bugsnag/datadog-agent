@@ -94,9 +94,9 @@ kitchen_ubuntu_sysprobe_arm64:
 
 kitchen_windows_sysprobe_x64:
   extends:
-    - .kitchen_test_system_probe_x64
     - .kitchen_agent_a7
     - .kitchen_os_windows
+    - .kitchen_test_system_probe_x64
   needs: [ "tests_windows_sysprobe_x64", "deploy_windows_testing-a7" ]
   variables:
     KITCHEN_OSVERS: "win2012r2"
