@@ -22,6 +22,7 @@ EBPF_BUILDER_FILE = os.path.join(".", "tools", "ebpf", "Dockerfiles", "Dockerfil
 BPF_TAG = "linux_bpf"
 BUNDLE_TAG = "ebpf_bindata"
 BCC_TAG = "bcc"
+NPM_TAG = "npm"
 GIMME_ENV_VARS = ['GOROOT', 'PATH']
 
 CLANG_CMD = "clang {flags} -c '{c_file}' -o '{bc_file}'"
@@ -180,7 +181,7 @@ def test(
     if not skip_object_files and not windows:
         build_object_files(ctx, bundle_ebpf=bundle_ebpf)
 
-    build_tags = []
+    build_tags = [NPM_TAG]
     if not windows:
         build_tags.append(BPF_TAG)
         if bundle_ebpf:
@@ -215,7 +216,7 @@ def kitchen_prepare(ctx, windows=is_windows):
     if os.path.exists(KITCHEN_ARTIFACT_DIR):
         shutil.rmtree(KITCHEN_ARTIFACT_DIR)
 
-    build_tags = []
+    build_tags = [NPM_TAG]
     if not windows:
         build_tags.append(BPF_TAG)
 
