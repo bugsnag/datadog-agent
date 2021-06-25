@@ -16,5 +16,5 @@ xcopy /e/s/h/q c:\mnt\*.* || exit /b 4
 Powershell -C "c:\mnt\tasks\winbuildscripts\sysprobe.ps1" || exit /b 5
 
 REM copy resulting packages to expected location for collection by gitlab.
-if not exist c:\mnt\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\ mkdir c:\mnt\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\ || exit /b 6
-xcopy /e/s/q \dev\go\src\github.com\DataDog\datadog-agent\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\*.* c:\mnt\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\ || exit /b 7
+if not exist c:\mnt\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\tests\ mkdir c:\mnt\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\tests\ || exit /b 6
+xcopy /e/s/q \dev\go\src\github.com\DataDog\datadog-agent\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\tests\*.* c:\mnt\test\kitchen\site-cookbooks\dd-system-probe-check\files\default\tests\ || exit /b 7
