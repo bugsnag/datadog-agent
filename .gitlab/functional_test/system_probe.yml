@@ -99,6 +99,7 @@ kitchen_windows_sysprobe_x64:
     - .kitchen_test_system_probe_x64
   needs: [ "tests_windows_sysprobe_x64", "deploy_windows_testing-a7" ]
   variables:
+    CHEF_VERSION: 14.12.9
     KITCHEN_OSVERS: "win2012r2"
     DEFAULT_KITCHEN_OSVERS: "win2012r2"
   script:
