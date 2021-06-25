@@ -95,14 +95,11 @@ kitchen_ubuntu_sysprobe_arm64:
 kitchen_windows_sysprobe_x64:
   extends:
     - .kitchen_test_system_probe_x64
-  needs: [ "tests_windows_sysprobe_x64" ]
+    - .kitchen_agent_a7
+    - .kitchen_os_windows
+  needs: [ "tests_windows_sysprobe_x64", "deploy_windows_testing-a7" ]
   variables:
-    KITCHEN_PLATFORM: "windows"
     KITCHEN_OSVERS: "win2012r2"
-  before_script:
-    - if [ $AGENT_MAJOR_VERSION == "7" ]; then export WINDOWS_TESTING_S3_BUCKET=$WINDOWS_TESTING_S3_BUCKET_A7; else export WINDOWS_TESTING_S3_BUCKET=$WINDOWS_TESTING_S3_BUCKET_A6; fi
-    - rsync -azr --delete ./ $SRC_PATH
-    - cd $DD_AGENT_TESTING_DIR
-    - bash -l tasks/kitchen_setup.sh
+    DEFAULT_KITCHEN_OSVERS: "win2012r2"
   script:
     - bash -l tasks/run-test-kitchen.sh windows-sysprobe-test $AGENT_MAJOR_VERSION
