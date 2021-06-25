@@ -35,6 +35,7 @@ type Builder struct {
 	namespaces    options.NamespaceList
 	ctx           context.Context
 	allowDenyList ksmtypes.AllowDenyLister
+	allowLabels   map[string][]string
 	metrics       *watch.ListWatchMetrics
 	shard         int32
 	totalShards   int
@@ -106,6 +107,12 @@ func (b *Builder) DefaultGenerateStoreFunc() ksmtypes.BuildStoreFunc {
 // WithGenerateStoreFunc configures a constom generate store function
 func (b *Builder) WithGenerateStoreFunc(f ksmtypes.BuildStoreFunc) {
 	b.ksmBuilder.WithGenerateStoreFunc(f)
+}
+
+// WithAllowLabels todo
+func (b *Builder) WithAllowLabels(l map[string][]string) {
+	b.allowLabels = l
+	b.ksmBuilder.WithAllowLabels(l)
 }
 
 // Build initializes and registers all enabled stores.

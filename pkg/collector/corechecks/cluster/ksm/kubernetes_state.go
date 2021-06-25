@@ -196,6 +196,11 @@ func (k *KSMCheck) Configure(config, initConfig integration.Data, source string)
 
 	builder.WithAllowDenyList(allowDenyList)
 
+	builder.WithAllowLabels(map[string][]string{
+		"pods":        {"*"},
+		"deployments": {"*"},
+	})
+
 	// Due to how init is done, we cannot use GetAPIClient in `Run()` method
 	// So we are waiting for a reasonable amount of time here in case.
 	// We cannot wait forever as there's no way to be notified of shutdown
