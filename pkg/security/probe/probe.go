@@ -466,7 +466,6 @@ func (p *Probe) handleEvent(CPU uint64, data []byte) {
 			log.Debugf("failed to resolve exec path: %s", err)
 		}
 		p.resolvers.ProcessResolver.SetProcessFilesystem(event.processCacheEntry)
-		p.resolvers.ProcessResolver.SetProcessContainerPath(event.processCacheEntry)
 
 		p.resolvers.ProcessResolver.SetProcessTTY(event.processCacheEntry)
 
